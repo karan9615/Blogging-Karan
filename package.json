@@ -27,5 +27,8 @@
   },
   "devDependencies": {
     "react-scripts": "^5.0.1"
+  },
+  "engines": {
+    "node" : "8.9.2"
   }
 }
