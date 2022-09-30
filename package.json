@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "cd client && npm run build",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "server": "nodemon index.js",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\""
