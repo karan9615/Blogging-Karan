@@ -5,11 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "cd client && npm run build",
-    "dev": "cd backend && npm run dev",
     "install-client": "cd client && npm install",
-    "install-backend":"cd backend && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "server": "npm run install-backend && npm run dev",
+    "server": "cd backend && nodemon index.js",
     "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
     "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\""
   },
