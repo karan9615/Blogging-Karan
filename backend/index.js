@@ -20,8 +20,8 @@ const PORT = process.env.PORT || 8080; //port number
 
 
 
-// app.use(cors({credentials: true,origin: "http://localhost:3000"}));
-app.use(cors())
+app.use(cors({credentials: true,origin: "http://localhost:3000"}));
+// app.use(cors())
 
 app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
 
