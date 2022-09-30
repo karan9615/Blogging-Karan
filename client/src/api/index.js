@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/",
+    baseURL: "https://blogging-app-karan.herokuapp.com/",
     withCredentials: true,
 }); 
 
