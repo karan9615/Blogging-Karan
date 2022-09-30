@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev-server": "npm run dev --prefix backend",
-    "dev-client": "npm run dev --prefix client",
-    "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
-    "install-all": "npm install && npm install --prefix client && npm install --prefix backend",
-    "start": "cd backend && nodemon index.js"
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "server": "nodemon index.js",
+    "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\""
   },
   "dependencies": {
     "abbrev": "^1.1.1",
