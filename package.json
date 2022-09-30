@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon index.js",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "build": "webpack"
+    "build": "react-scripts build"
   },
   "keywords": [],
   "author": "",
@@ -27,8 +27,5 @@
   },
   "devDependencies": {
     "react-scripts": "^5.0.1"
-  },
-  "engines": {
-    "node" : "8.9.2"
   }
 }
