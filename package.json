@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "build": "react-scripts build"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -24,8 +23,5 @@
     "nodemailer": "^6.7.8",
     "nodemon": "^2.0.19",
     "path": "^0.12.7"
-  },
-  "devDependencies": {
-    "react-scripts": "^5.0.1"
   }
 }
