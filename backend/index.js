@@ -18,7 +18,14 @@ const blogRoutes = require("./routes/Blog")
 
 
 // app.use(cors({credentials: true,origin: "http://localhost:3000"}));
-app.use(cors())
+// app.use(cors())
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: 'http://localhost:3000',
+    changeOrigin: true,
+  })
+);
 
 app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
 
@@ -28,10 +35,10 @@ connectDB(); //Database connection
 app.use('/api/user',userRoutes);
 app.use("/api/blog",blogRoutes);
 
-app.use(express.static(path.resolve(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../client/build","index.html"));
+  res.sendFile(path.join(__dirname, "../client/build","index.html"));
 });
 
 // app.use(express.static(path.join(__dirname, '../client/build')))
