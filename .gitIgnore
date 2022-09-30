@@ -4,6 +4,12 @@
 /client/.pnp
 /client/.pnp.js
 
+node_modules/
+.env
+*.orig
+.idea/
+.vscode/
+
 /client/coverage
 
 /client/build
