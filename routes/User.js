@@ -13,7 +13,7 @@ const {
     getMyPosts,
     getUserPosts,
     getAllUsers
-} = require("../controllers/user")
+} = require("../controllers/User")
 
 const {isAuthenticated} = require("../middlewares/auth")
 const router = express.Router(); 
