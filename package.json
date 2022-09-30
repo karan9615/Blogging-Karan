@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js",
+    "server": "nodemon backend/index.js",
     "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
@@ -27,5 +27,8 @@
     "nodemailer": "^6.7.8",
     "nodemon": "^2.0.19",
     "path": "^0.12.7"
-  }
+  },
+  "engines": {
+    "node": "10.16.0"
+}
 }
