@@ -16,9 +16,6 @@ require("dotenv").config(); //for storing environment variable
 const userRoutes = require("./routes/User")
 const blogRoutes = require("./routes/Blog")
 
-const PORT = process.env.PORT || 8080; //port number
-
-
 
 // app.use(cors({credentials: true,origin: "http://localhost:3000"}));
 app.use(cors())
@@ -54,4 +51,4 @@ app.get("*", (req, res) => {
 //     app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "../client/build/index.html")));
 //   }
 
-app.listen(PORT,()=>console.log("app is succesfully running on PORT no.",PORT)); //Server running on port 8080
+app.listen(process.env.PORT || 8080,()=>console.log("app is succesfully running on PORT no.",PORT)); //Server running on port 8080
