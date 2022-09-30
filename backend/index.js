@@ -20,7 +20,8 @@ const PORT = process.env.PORT || 8080; //port number
 
 
 
-app.use(cors({credentials: true,origin: "http://localhost:3000"}));
+// app.use(cors({credentials: true,origin: "http://localhost:3000"}));
+app.use(cors())
 
 app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
 
@@ -36,10 +37,10 @@ app.use("/api/blog",blogRoutes);
 //   res.sendFile(path.resolve(__dirname, "../client/build","index.html"));
 // });
 
-app.use(express.static(path.join(__dirname, '../client/build')))
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build'))
-})
+// app.use(express.static(path.join(__dirname, '../client/build')))
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../client/build'))
+// })
 
 // if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
 //   app.use(express.static('/client/build'));
@@ -48,5 +49,9 @@ app.get('*', (req, res) => {
 //   });
 //  }
 
+if (process.env.NODE_ENV == "production") {
+    app.use(express.static(path.resolve(__dirname, "../client/build")));
+    app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "../client/build/index.html")));
+  }
 
 app.listen(PORT,()=>console.log("app is succesfully running on PORT no.",PORT)); //Server running on port 8080
