@@ -228,7 +228,7 @@ const GeneralUserProfile = ({ openUser, setOpenUser, data }) => {
 
   useEffect(() => {
     getUserPosts();
-  }, [getUserPosts]);
+  }, []);
 
   return (
     <Modal
@@ -302,7 +302,7 @@ const SmallCards = ({ data, getPosts }) => {
 
   useEffect(() => {
     getPosts();
-  }, [getPosts]);
+  }, []);
 
   var date = new Date(data?.createdAt);
   date = date.toDateString();

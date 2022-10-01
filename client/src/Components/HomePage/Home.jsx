@@ -40,7 +40,7 @@ const Home = () => {
       setRender(false);
       getPosts();
     }
-  }, [getPosts, render]);
+  }, []);
 
   return (
     <div>
