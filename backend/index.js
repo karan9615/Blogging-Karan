@@ -17,17 +17,17 @@ const userRoutes = require("./routes/User")
 const blogRoutes = require("./routes/Blog")
 
 
-app.use(cors({credentials: true,origin: "http://localhost:3000"}));
+// app.use(cors({credentials: true,origin: "http://localhost:3000"}));
 // app.use(cors())
 
-// const {createProxyMiddleware} = require('http-proxy-middleware')
-// app.use(
-//   '/',
-//   createProxyMiddleware({
-//     target: 'http://localhost:3000',
-//     changeOrigin: true,
-//   })
-// );
+const {createProxyMiddleware} = require('http-proxy-middleware')
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: 'http://localhost:3000',
+    changeOrigin: true,
+  })
+);
 
 app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
 
@@ -36,12 +36,6 @@ connectDB(); //Database connection
 
 app.use('/api/user',userRoutes);
 app.use("/api/blog",blogRoutes);
-
-app.use(express.static(path.join(__dirname, "../client/build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build","index.html"));
-});
 
 // app.use(express.static(path.join(__dirname, '../client/build')))
 // app.get('*', (req, res) => {
@@ -54,10 +48,9 @@ app.get("*", (req, res) => {
 //   res.sendFile(path.join(__dirname + '/client/build/index.html'));
 //   });
 //  }
+if (process.env.NODE_ENV == "production") {
+  app.use(express.static(path.resolve(__dirname, "../client/build")));
+  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "../client/build/index.html")));
+}
 
-// if (process.env.NODE_ENV == "production") {
-//     app.use(express.static(path.resolve(__dirname, "../client/build")));
-//     app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "../client/build/index.html")));
-//   }
-
-app.listen(process.env.PORT || 8080,()=>console.log("app is succesfully running on PORT no.",8080)); //Server running on port 8080
+app.listen(process.env.PORT || 8080,()=>console.log("app is succesfully running")); //Server running on port 8080
