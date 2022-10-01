@@ -4,8 +4,6 @@ import {
   EditFilled,
   HeartFilled,
   HeartOutlined,
-  LeftSquareFilled,
-  RightSquareFilled,
   SendOutlined,
   UserOutlined,
   LoadingOutlined,
@@ -28,7 +26,7 @@ const EditCaption = ({ data, editModal, setEditModal, getPosts }) => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const res = await api.put(`/api/blog/post/${data._id}`, formData);
+      await api.put(`/api/blog/post/${data._id}`, formData);
       setFormData({
         caption: "",
       });
@@ -272,7 +270,6 @@ const SmallCards = ({ data, getPosts }) => {
   const [commentform, setCommentform] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [openUser, setOpenUser] = useState(false);
-  const [loading,setLoading] = useState(false);
 
   function createMarkup(val) {
     return { __html: val };
@@ -280,9 +277,7 @@ const SmallCards = ({ data, getPosts }) => {
 
   const handleDeleteBlog = async () => {
     try {
-      setLoading(true)
-      const res = await api.delete(`/api/blog/post/${data._id}`);
-      setLoading(false)
+      await api.delete(`/api/blog/post/${data._id}`);
       getPosts();
       // console.log(res);
     } catch (error) {

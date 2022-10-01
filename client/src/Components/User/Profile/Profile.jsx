@@ -1,16 +1,16 @@
-import { UserOutlined, HeartFilled, RiseOutlined,LoadingOutlined } from "@ant-design/icons";
+import { UserOutlined,LoadingOutlined } from "@ant-design/icons";
 import React,{useCallback} from "react";
 import { useState, useEffect } from "react";
 import api from "../../../api";
 import {Toaster,toast} from "react-hot-toast"
 
-const Tag = ({ name }) => {
-  return (
-    <div className="border  text-center text-sm   px-2 py-1 mx-1 text-gray-300 hover:text-white hover:bg-gray-500 transition-all duration-300 cursor-pointer">
-      {name}
-    </div>
-  );
-};
+// const Tag = ({ name }) => {
+//   return (
+//     <div className="border  text-center text-sm   px-2 py-1 mx-1 text-gray-300 hover:text-white hover:bg-gray-500 transition-all duration-300 cursor-pointer">
+//       {name}
+//     </div>
+//   );
+// };
 
 const Profile = () => {
   const [updateBtn, setUpdateBtn] = useState(false);
