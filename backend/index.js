@@ -18,16 +18,16 @@ const blogRoutes = require("./routes/Blog")
 
 
 // app.use(cors({credentials: true,origin: "http://localhost:3000"}));
-// app.use(cors())
+app.use(cors())
 
-const {createProxyMiddleware} = require('http-proxy-middleware')
-app.use(
-  '/api',
-  createProxyMiddleware({
-    target: 'http://localhost:3000',
-    changeOrigin: true,
-  })
-);
+// const {createProxyMiddleware} = require('http-proxy-middleware')
+// app.use(
+//   '/api',
+//   createProxyMiddleware({
+//     target: 'http://localhost:3000',
+//     changeOrigin: true,
+//   })
+// );
 
 app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
 
