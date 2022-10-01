@@ -50,7 +50,7 @@ app.use("/api/blog",blogRoutes);
 //  }
 if (process.env.NODE_ENV == "production") {
   app.use(express.static(path.resolve(__dirname, "../client/build")));
-  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "../client/build/index.html")));
+  app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "../client/build","index.htnl")));
 }
 
 app.listen(process.env.PORT || 8080,()=>console.log("app is succesfully running")); //Server running on port 8080
