@@ -224,7 +224,7 @@ const GeneralUserProfile = ({ openUser, setOpenUser, data }) => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [data.owner._id]);
 
   useEffect(() => {
     getUserPosts();
