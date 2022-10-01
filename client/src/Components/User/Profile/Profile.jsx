@@ -1,7 +1,8 @@
-import { UserOutlined, HeartFilled, RiseOutlined } from "@ant-design/icons";
+import { UserOutlined, HeartFilled, RiseOutlined,LoadingOutlined } from "@ant-design/icons";
 import React,{useCallback} from "react";
 import { useState, useEffect } from "react";
 import api from "../../../api";
+import {Toaster,toast} from "react-hot-toast"
 
 const Tag = ({ name }) => {
   return (
@@ -14,6 +15,7 @@ const Tag = ({ name }) => {
 const Profile = () => {
   const [updateBtn, setUpdateBtn] = useState(false);
   const [response, setResponse] = useState({});
+  const [loading,setLoading] = useState(false);
   const handleUpdateBtn = () => {
     setUpdateBtn(!updateBtn);
   };
@@ -23,8 +25,10 @@ const Profile = () => {
   })
   const getUserProfile = useCallback(async () => {
     try {
+      setLoading(true)
       const data = await api.get("/api/user/me");
       setResponse(data.data.user)
+      setLoading(false)
     } catch (error) {
       console.log(error)
     }
@@ -33,8 +37,12 @@ const Profile = () => {
   const handleUpdateProfile = async () => {
     try {
       // console.log(updateForm)
+      setLoading(true)
       await api.put("/api/user/update/profile",updateForm)
       // console.log("done update")
+      setLoading(false)
+      toast.success("Updated Successfully")
+      getUserProfile();
       setUpdateBtn(false)
     } catch (error) {
       console.log(error)
@@ -43,9 +51,13 @@ const Profile = () => {
 
   const handleDeleteAccount = async () => {
     try {
+      setLoading(true)
       localStorage.removeItem("userToken"); 
       localStorage.removeItem("userId")
       await api.delete("/api/user/delete/me"); 
+      setLoading(false)
+      toast.success("Deleted Successfully"); 
+      getUserProfile();
     } catch (error) {
       console.log(error)
     }
@@ -61,7 +73,7 @@ const Profile = () => {
   getUserProfile();
   setResponse(response)
   // console.log(response)
-  }, [handleUpdateProfile,handleDeleteAccount])
+  }, [getUserProfile])
   
 
   return (
@@ -132,7 +144,7 @@ const Profile = () => {
             <span className="ml-1">56</span>
           </li> */}
           {
-            updateBtn && <div className="w-1/3 my-2 px-3 py-1 bg-[#ce0000] text-white text-md items-center justify-center text-center cursor-pointer hover:shadow-lg" onClick={handleUpdateProfile}>Update</div>
+            updateBtn && <div className="w-1/3 my-2 px-3 py-1 bg-[#ce0000] text-white text-md items-center justify-center text-center cursor-pointer hover:shadow-lg" onClick={handleUpdateProfile}>{ loading ? <LoadingOutlined className="" /> :"Update"}</div>
           }
         </ul>
       </div>
@@ -156,6 +168,7 @@ const Profile = () => {
           Delete Account
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

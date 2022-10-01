@@ -8,10 +8,12 @@ import {
   RightSquareFilled,
   SendOutlined,
   UserOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import { Toaster, toast } from "react-hot-toast";
 
 import "react-responsive-modal/styles.css";
 import Modal from "react-responsive-modal";
@@ -21,14 +23,19 @@ const EditCaption = ({ data, editModal, setEditModal, getPosts }) => {
     caption: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const res = await api.put(`/api/blog/post/${data._id}`, formData);
       setFormData({
         caption: "",
       });
       getPosts();
       setEditModal(false);
+      toast.success("Updated Succesffully");
+      setLoading(false);
       // console.log(res);
     } catch (error) {
       console.log(error);
@@ -61,38 +68,50 @@ const EditCaption = ({ data, editModal, setEditModal, getPosts }) => {
             onClick={handleSubmit}
             className="cursor-pointer px-2 py-2 mt-8 mb-4  border-2 border-[#52ab98] hover:bg-[#52ab98] hover:text-white w-1/3 text-center transition-all duration-700"
           >
-            Update
+            {loading ? (
+              <LoadingOutlined className="text-2xl flex justify-center items-center" />
+            ) : (
+              "Update"
+            )}
           </div>
         </div>
       </div>
+      <Toaster position="bottom-center" reverseOrder="false" />
     </Modal>
   );
 };
 
 const CommentForm = ({ commentform, setCommentform, data, getPosts }) => {
   // console.log(data)
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     comment: "",
   });
 
-  const handleDeleteComment = async (e,userId,blogId) => {
+  const handleDeleteComment = async (e, userId, blogId) => {
     e.preventDefault();
-    try { 
-      console.log("user.ID",userId); 
-      await api.delete(`/api/blog/post/comment/${blogId}`,{commentId: userId});
+    try {
+      // console.log("user.ID",userId);
+      setLoading(true);
+      await api.delete(`/api/blog/post/comment/${blogId}`, {
+        commentId: userId,
+      });
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
-}
+  };
 
   const handleSubmit = async () => {
     try {
       if (formData.comment) {
+        setLoading(true);
         await api.put(`/api/blog/post/comment/${data._id}`, formData);
         // data = temp.data.blog;
         setFormData({
           comment: "",
         });
+        setLoading(false);
         getPosts();
       } else {
         // console.log("Enter Some Value");
@@ -112,7 +131,7 @@ const CommentForm = ({ commentform, setCommentform, data, getPosts }) => {
       >
         <div className="sm:w-96">
           <div className="my-1">Add Comment</div>
-          <div className="flex items-center">
+          <div className="flex items-center ">
             <input
               type="text"
               name="comment_val"
@@ -123,7 +142,14 @@ const CommentForm = ({ commentform, setCommentform, data, getPosts }) => {
                 setFormData({ ...formData, comment: e.target.value })
               }
             />
-            <SendOutlined className="ml-2 text-2xl" onClick={handleSubmit} />
+            {loading ? (
+              <LoadingOutlined />
+            ) : (
+              <SendOutlined
+                className="flex items-center ml-2 text-2xl"
+                onClick={handleSubmit}
+              />
+            )}
           </div>
           <ul className="my-1">
             {data?.comments?.map((val, index) => (
@@ -133,11 +159,13 @@ const CommentForm = ({ commentform, setCommentform, data, getPosts }) => {
               >
                 {val?.comment}
                 <span className="flex justify-center text-xs sm:text-md">
-                 { val.user._id === JSON.parse(localStorage.getItem("userId")) && <DeleteFilled
-                    className="mx-3 flex items-center cursor-pointer"
-                    onClick={(e)=>handleDeleteComment(e,val._id,data._id)}
-                  />
-            }
+                  {val.user._id ===
+                    JSON.parse(localStorage.getItem("userId")) && (
+                    <DeleteFilled
+                      className="mx-3 flex items-center cursor-pointer"
+                      onClick={(e) => handleDeleteComment(e, val._id, data._id)}
+                    />
+                  )}
                   <img
                     src=""
                     alt=""
@@ -149,6 +177,7 @@ const CommentForm = ({ commentform, setCommentform, data, getPosts }) => {
             ))}
           </ul>
         </div>
+        <Toaster />
       </Modal>
     </div>
   );
@@ -185,10 +214,13 @@ const MiniCards = ({ data }) => {
 
 const GeneralUserProfile = ({ openUser, setOpenUser, data }) => {
   const [response, setResponse] = useState([]);
+  const [loading, setLoading] = useState(false);
   const getUserPosts = useCallback(async () => {
     try {
+      setLoading(true);
       const res = await api.get(`/api/user/userposts/${data.owner._id}`);
       setResponse(res.data.userBlogs);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -215,15 +247,20 @@ const GeneralUserProfile = ({ openUser, setOpenUser, data }) => {
             </div>
           </div>
         </div>
-        <div className="relative flex items-center top-[150px] w-full">
-          <div className="relative overflow-x-auto">
-            <div className="flex">
-              {response?.map((val, index) => (
-                <MiniCards key={index} data={val} />
-              ))}
+
+        {loading ? (
+          <LoadingOutlined className="text-4xl relative flex items-center justify-center top-[150px] w-full" />
+        ) : (
+          <div className="relative flex items-center top-[150px] w-full">
+            <div className="relative overflow-x-auto">
+              <div className="flex">
+                {response?.map((val, index) => (
+                  <MiniCards key={index} data={val} />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </Modal>
   );
@@ -235,6 +272,7 @@ const SmallCards = ({ data, getPosts }) => {
   const [commentform, setCommentform] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [openUser, setOpenUser] = useState(false);
+  const [loading,setLoading] = useState(false);
 
   function createMarkup(val) {
     return { __html: val };
@@ -242,13 +280,15 @@ const SmallCards = ({ data, getPosts }) => {
 
   const handleDeleteBlog = useCallback(async () => {
     try {
+      setLoading(true)
       const res = await api.delete(`/api/blog/post/${data._id}`);
+      setLoading(false)
       getPosts();
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       console.log(error);
     }
-  }, [data._id,getPosts]);
+  }, [data._id, getPosts]);
 
   const handleLike = useCallback(async () => {
     try {

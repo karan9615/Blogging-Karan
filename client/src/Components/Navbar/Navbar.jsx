@@ -8,6 +8,7 @@ import {
   MenuFoldOutlined,
   InstagramFilled,
   LinkedinFilled,
+  LoadingOutlined
 } from "@ant-design/icons";
 
 import ChangePassword from "../User/ChangePassword/ChangePassword";
@@ -26,6 +27,8 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     password: "",
   });
 
+  const [loading,setLoading] = useState(false)
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -34,9 +37,11 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
 
   const handleSignUp = async () => {
     try {
+      setLoading(true)
       const { data } = await api.post("/api/user/register", formData);
       localStorage.setItem("userToken", JSON.stringify(data.token));
       localStorage.setItem("userId", JSON.stringify(data.user._id));
+      setLoading(false)
     } catch (error) {
       console.log(error);
     }
@@ -86,7 +91,7 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
           onClick={handleSignUp}
         >
           <div className="relative overflow-hidden hover:scale-125 transition-all duration-700">
-            Register
+            {loading ? <LoadingOutlined className="" /> : "Register"}
           </div>
         </div>
       </form>
@@ -117,17 +122,21 @@ const SignInPhase = ({  handleLoginState }) => {
     password: "",
   });
 
+  const [loading,setLoading] = useState(false)
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSignin = async () => {
     try {
+      setLoading(true)
       const { data } = await api.post("/api/user/login", formData);
       // console.log(data)
       // console.log(data.user);
       localStorage.setItem("userToken", JSON.stringify(data.token));
       localStorage.setItem("userId", JSON.stringify(data.user._id));
+      setLoading(false)
     } catch (error) {
       console.log(error);
     }
@@ -139,7 +148,9 @@ const SignInPhase = ({  handleLoginState }) => {
   const handleForgotPassword = async () => {
     try {
       if (formData.email) {
+        setLoading(true)
         await api.post("/api/user/forgot/password", { email: formData.email });
+        setLoading(false)
       } else {
         alert("Please type your email..");
       }
@@ -179,7 +190,7 @@ const SignInPhase = ({  handleLoginState }) => {
           onClick={handleSignin}
         >
           <div className="relative overflow-hidden hover:scale-125 transition-all duration-700">
-            Login
+            {loading ? <LoadingOutlined />: "Login" }
           </div>
         </div>
       </form>

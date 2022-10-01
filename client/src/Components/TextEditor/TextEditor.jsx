@@ -4,9 +4,11 @@ import { EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {convertToHTML} from "draft-convert"
 import api from "../../api";
-
+import {LoadingOutlined} from "@ant-design/icons"
+import {Toaster,toast} from "react-hot-toast"
 
 const TextEditor = ({ onSubmit }) => {
+  const [loading,setLoading] = useState(false)
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   // const [image,setImage] = useState("");
   const [formData,setFormData] = useState({
@@ -16,8 +18,10 @@ const TextEditor = ({ onSubmit }) => {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true)
       const res = await api.post("/api/blog/post/upload",formData);
       setFormData({caption: "",content: ""}); 
+      setLoading(false)
       window.location.href="/"
     } catch (error) {
       console.log(error)
@@ -52,7 +56,7 @@ const TextEditor = ({ onSubmit }) => {
           className="btn px-2 py-1 bg-[#234fff] mx-5 text-white my-3 cursor-pointer"
           onClick={handleSubmit}
         >
-          Submit
+          {loading ? <LoadingOutlined className="text-xl" /> : "Submit" }
         </div>
       </form>
     </div>

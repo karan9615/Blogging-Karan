@@ -1,35 +1,47 @@
-import React, { useState, useEffect ,useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   HeartFilled,
   EditFilled,
   DeleteFilled,
   HeartOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import api from "../../api";
+import { Toaster, toast } from "react-hot-toast";
 
 import "react-responsive-modal/styles.css";
 import Modal from "react-responsive-modal";
 
-const EditCaption = ({response,editModal,setEditModal}) => {
-  const [formData,setFormData] = useState({
-    caption: ""
-  }); 
+const EditCaption = ({ response, editModal, setEditModal }) => {
+  const [formData, setFormData] = useState({
+    caption: "",
+  });
+
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     try {
-      const res = await api.put(`/api/blog/post/${response._id}`,formData);
+      setLoading(true);
+      const res = await api.put(`/api/blog/post/${response._id}`, formData);
       setFormData({
-        caption: ""
-      })
-      setEditModal(false)
+        caption: "",
+      });
+      setEditModal(false);
       // console.log(res)
+      toast.success("Updated Succesffully")
+      setLoading(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   return (
-    <Modal open={editModal} onClose={()=>setEditModal(false)} center animationDuration={500} >
+    <Modal
+      open={editModal}
+      onClose={() => setEditModal(false)}
+      center
+      animationDuration={500}
+    >
       <div className="w-96 border my-5 py-3 px-5 shadow-xl bg-[#2b6777] text-white">
         <div className="w-full my-2">
           <span className="text-xl">Current Title: </span>
@@ -37,14 +49,31 @@ const EditCaption = ({response,editModal,setEditModal}) => {
         </div>
         <div className="my-4">
           <label className="text-xl">New Title: </label>
-          <input className="px-2 py-1 text-black outline outline-1 outline-gray-400 hover: " name="newCaption" placeholder="Enter New Title..." value={formData.caption} onChange={(e)=>setFormData({...formData,caption: e.target.value})} />
-          <div onClick={handleSubmit} className="cursor-pointer px-2 py-2 mt-8 mb-4  border-2 border-[#52ab98] hover:bg-[#52ab98] hover:text-white w-1/3 text-center transition-all duration-700">Update</div>
+          <input
+            className="px-2 py-1 text-black outline outline-1 outline-gray-400 hover: "
+            name="newCaption"
+            placeholder="Enter New Title..."
+            value={formData.caption}
+            onChange={(e) =>
+              setFormData({ ...formData, caption: e.target.value })
+            }
+          />
+          <div
+            onClick={handleSubmit}
+            className="cursor-pointer px-2 py-2 mt-8 mb-4  border-2 border-[#52ab98] hover:bg-[#52ab98] hover:text-white w-1/3 text-center transition-all duration-700"
+          >
+            {loading ? (
+              <LoadingOutlined className="text-2xl flex justify-center items-center" />
+            ) : (
+              "Update"
+            )}
+          </div>
         </div>
       </div>
+      <Toaster position="bottom-center" reverseOrder="false" />
     </Modal>
   );
 };
-
 
 const LargeCards = () => {
   const navigate = useNavigate();
@@ -52,8 +81,9 @@ const LargeCards = () => {
   const [formData, setFormData] = useState({
     comment: "",
   });
-  
-  const [editModal,setEditModal] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const [editModal, setEditModal] = useState(false);
 
   const [like, setLike] = useState(false);
   const userId = useParams();
@@ -63,13 +93,14 @@ const LargeCards = () => {
     try {
       const res = await api.delete(`/api/blog/post/${userId.id}`);
       getThisPost();
-      console.log(res);
-      window.location.href ="/"
+      // console.log(res);
+      toast.success("Deleted Successfully")
+      window.location.href = "/";
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   const getThisPost = useCallback(async () => {
     try {
       const temp = await api.get(`/api/blog/post/this/${userId.id}`);
@@ -78,36 +109,36 @@ const LargeCards = () => {
     } catch (error) {
       console.log(error);
     }
-  },[userId.id]);
+  }, [userId.id]);
 
   const handleCommentSubmit = async () => {
-      try {
-        if (formData.comment) {
-          await api.put(`/api/blog/post/comment/${userId.id}`,formData);
-          // data = temp.data.blog;
-          setFormData({
-            comment: "",
-          });
-          getThisPost();
-        } else {
-          // console.log("Enter Some Value");
-        }
-      } catch (error) {
-        console.log(error);
+    try {
+      if (formData.comment) {
+        await api.put(`/api/blog/post/comment/${userId.id}`, formData);
+        // data = temp.data.blog;
+        setFormData({
+          comment: "",
+        });
+        toast.success("Comment Added Successfully")
+        getThisPost();
+
+      } else {
+        // console.log("Enter Some Value");
+        alert("Comment can not by empty !!")
       }
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-  
-    const handleLike = async () => {
-      try {
-        await api.get(`/api/blog/post/${userId.id}`);
-        // console.log(test);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  
-
+  const handleLike = async () => {
+    try {
+      await api.get(`/api/blog/post/${userId.id}`);
+      // console.log(test);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     getThisPost();
@@ -115,7 +146,7 @@ const LargeCards = () => {
       (val) => val._id === JSON.parse(localStorage.getItem("userId"))
     );
     setLike(ress?.length === 1 ? true : false);
-  }, [handleLike,handleDeleteBlog]);
+  }, [getThisPost,handleLike,handleDeleteBlog]);
 
   function createMarkup(val) {
     return { __html: val };
@@ -123,9 +154,10 @@ const LargeCards = () => {
 
   return (
     <div className="py-24 text-left px-10">
-      <div className="text-xl flex space-x-5 sm:float-right my-3">
-      <EditFilled onClick={()=>setEditModal(true)} />
-      <DeleteFilled onClick={handleDeleteBlog} />
+      { loading ? <LoadingOutlined /> : <div>
+        <div className="text-xl flex space-x-5 sm:float-right my-3">
+        <EditFilled onClick={() => setEditModal(true)} />
+        <DeleteFilled onClick={handleDeleteBlog} />
       </div>
       <div className="text-4xl flex flex-wrap sm:px-10">
         <div className="relative overflow-hidden sm:h-64 sm:p-2 hover:shadow-xl bg-gray-200 outline-gray-500 outline-double">
@@ -145,17 +177,17 @@ const LargeCards = () => {
           <div className="text-lg hidden sm:block">Created on: 22/10/2022</div>
           <div className="hidden sm:block">
             <div className="flex items-center space-x-5 text-xl mt-10">
-            {like ? (
-            <HeartFilled
-              className="text-red-500 hover:-translate-y-1 transition-all duration-500 cursor-pointer"
-              onClick={handleLike}
-            />
-          ) : (
-            <HeartOutlined
-              className="hover:-translate-y-1 transition-all duration-500 cursor-pointer"
-              onClick={handleLike}
-            />
-          )}
+              {like ? (
+                <HeartFilled
+                  className="text-red-500 hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+                  onClick={handleLike}
+                />
+              ) : (
+                <HeartOutlined
+                  className="hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+                  onClick={handleLike}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -170,21 +202,25 @@ const LargeCards = () => {
       <form className="sm:px-10">
         <div className="block sm:hidden">
           <div className="flex items-center space-x-5 text-xl">
-          {like ? (
-            <HeartFilled
-              className="text-red-500 hover:-translate-y-1 transition-all duration-500 cursor-pointer"
-              onClick={handleLike}
-            />
-          ) : (
-            <HeartOutlined
-              className="hover:-translate-y-1 transition-all duration-500 cursor-pointer"
-              onClick={handleLike}
-            />
-          )}
+            {like ? (
+              <HeartFilled
+                className="text-red-500 hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+                onClick={handleLike}
+              />
+            ) : (
+              <HeartOutlined
+                className="hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+                onClick={handleLike}
+              />
+            )}
           </div>
         </div>
-        <div className="text-lg mt-2 block sm:hidden">Created by: {response.owner?.name}</div>
-        <div className="text-lg block sm:hidden">Created on: {(new Date(response?.createdAt)).toDateString()}</div>
+        <div className="text-lg mt-2 block sm:hidden">
+          Created by: {response.owner?.name}
+        </div>
+        <div className="text-lg block sm:hidden">
+          Created on: {new Date(response?.createdAt).toDateString()}
+        </div>
 
         <label className="font-semibold mt-5 sm:mt-0 text-xl text-[#2b6777] w-full">
           Add Comment
@@ -194,30 +230,40 @@ const LargeCards = () => {
           className="w-full h-24 mt-3 border px-2 py-2"
           name="comment_val"
           value={formData.comment}
-          onChange={(e)=>{setFormData({...formData,comment: e.target.value})}}
+          onChange={(e) => {
+            setFormData({ ...formData, comment: e.target.value });
+          }}
         />
-        <div className="flex flex-wrap sm:w-1/12 py-2 text-white bg-[#2b6777] justify-center cursor-pointer hover:bg-[#2f5d69]" onClick={handleCommentSubmit}>
+        <div
+          className="flex flex-wrap sm:w-1/12 py-2 text-white bg-[#2b6777] justify-center cursor-pointer hover:bg-[#2f5d69]"
+          onClick={handleCommentSubmit}
+        >
           Submit
         </div>
 
         <ul className="my-1 border px-2 py-1">
-            {response.comments?.map((val, index) => (
-              <li key={index} className="flex justify-between items-center my-2">
-                {val.comment}
-                <span className="flex justify-center text-xs sm:text-md">
-                  <img
-                    src=""
-                    alt=""
-                    className="h-5 w-5 bg-gray-600  rounded-full"
-                  />
-                  <span>{val.user?.name}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-
+          {response.comments?.map((val, index) => (
+            <li key={index} className="flex justify-between items-center my-2">
+              {val.comment}
+              <span className="flex justify-center text-xs sm:text-md">
+                <img
+                  src=""
+                  alt=""
+                  className="h-5 w-5 bg-gray-600  rounded-full"
+                />
+                <span>{val.user?.name}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
       </form>
-      <EditCaption response={response} editModal={editModal} setEditModal={setEditModal} />
+      <EditCaption
+        response={response}
+        editModal={editModal}
+        setEditModal={setEditModal}
+      />
+      </div>}
+      <Toaster />
     </div>
   );
 };

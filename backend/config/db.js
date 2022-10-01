@@ -13,8 +13,8 @@ const options = {
 }
   const connectDB  = async () => {
     try {
-      // await mongoose.connect("mongodb://localhost:27017/blogging",options); 
-      await mongoose.connect(process.env.MONGO_URI,options)
+      await mongoose.connect("mongodb://localhost:27017/blogging",options); 
+      // await mongoose.connect(process.env.MONGO_URI,options)
       console.log("database connected successfullly");
     } catch (error) {
       console.log(error); 

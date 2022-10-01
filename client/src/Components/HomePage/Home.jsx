@@ -1,45 +1,46 @@
-import { BookOutlined } from "@ant-design/icons";
-import React,{useState,useEffect,useCallback} from "react";
+import { BookOutlined, LoadingOutlined } from "@ant-design/icons";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import SmallCards from "../Cards/SmallCards";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [response, setResponse] = useState([]); 
+  const [response, setResponse] = useState([]);
+  const [loading, setLoading] = useState(false);
   // const getPosts = useCallback(
   //   async () => {
   //       try {
-  //         const {data} = await api.get('/api/blog/posts'); 
-  //         // console.log(data.data); 
+  //         const {data} = await api.get('/api/blog/posts');
+  //         // console.log(data.data);
   //         setResponse(data.data);
   //       } catch (error) {
   //         console.log(error);
   //       }
   //   },
   //   [],
-  // ); 
+  // );
 
   const getPosts = useCallback(async () => {
     try {
-      const {data} = await api.get('/api/blog/posts'); 
-      // console.log(data.data); 
+      setLoading(true);
+      const { data } = await api.get("/api/blog/posts");
+      // console.log(data.data);
       setResponse(data.data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
-},[]);
+  }, []);
 
-const [render,setRender] = useState(true)
+  const [render, setRender] = useState(true);
 
-
-useEffect(() => {
-if(render){
-  setRender(false); 
-  getPosts()
-}
-}, [getPosts,render])
-
+  useEffect(() => {
+    if (render) {
+      setRender(false);
+      getPosts();
+    }
+  }, [getPosts, render]);
 
   return (
     <div>
@@ -77,13 +78,22 @@ if(render){
         />
       </div>
 
-      <div className="text-left px-10 sm:px-16 mt-3 text-3xl flex items-center space-x-5"><BookOutlined className="text-gray-500" /><span className="text-gray-500">Let's See <hr className="outline-none border-none mt-1 py-[3px] rounded-2xl" /></span></div>
-      <div className="w-full flex flex-wrap justify-center px-10 sm:px-16 py-5">
-      {
-        response?.map((val,index) => <SmallCards key={index} data={val} getPosts={getPosts}/>)
-      }
+      <div className="text-left px-10 sm:px-16 mt-3 text-3xl flex items-center space-x-5">
+        <BookOutlined className="text-gray-500" />
+        <span className="text-gray-500">
+          Let's See{" "}
+          <hr className="outline-none border-none mt-1 py-[3px] rounded-2xl" />
+        </span>
       </div>
-      
+      {loading ? (
+        <LoadingOutlined className="text-3xl" />
+      ) : (
+        <div className="w-full flex flex-wrap justify-center px-10 sm:px-16 py-5">
+          {response?.map((val, index) => (
+            <SmallCards key={index} data={val} getPosts={getPosts} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

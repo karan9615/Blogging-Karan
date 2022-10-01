@@ -17,15 +17,17 @@ const userRoutes = require("./routes/User")
 const blogRoutes = require("./routes/Blog")
 
 
-// app.use(cors({credentials: true,origin: "http://localhost:3000"}));
+app.use(cors({credentials: true,origin: "http://localhost:3000"}));
 // app.use(cors())
-app.use(
-  '/api',
-  createProxyMiddleware({
-    target: 'http://localhost:3000',
-    changeOrigin: true,
-  })
-);
+
+// const {createProxyMiddleware} = require('http-proxy-middleware')
+// app.use(
+//   '/',
+//   createProxyMiddleware({
+//     target: 'http://localhost:3000',
+//     changeOrigin: true,
+//   })
+// );
 
 app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
 
@@ -58,4 +60,4 @@ app.get("*", (req, res) => {
 //     app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "../client/build/index.html")));
 //   }
 
-app.listen(process.env.PORT || 8080,()=>console.log("app is succesfully running on PORT no.",PORT)); //Server running on port 8080
+app.listen(process.env.PORT || 8080,()=>console.log("app is succesfully running on PORT no.",8080)); //Server running on port 8080
