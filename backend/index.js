@@ -29,7 +29,7 @@ app.use(cors())
 //   })
 // );
 
-app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
+// app.get('/',(req,res)=>res.send("Welcome to the backend of the blogging website")) //Home route
 
 connectDB(); //Database connection
 
