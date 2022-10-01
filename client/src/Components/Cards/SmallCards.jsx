@@ -224,7 +224,7 @@ const GeneralUserProfile = ({ openUser, setOpenUser, data }) => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [data.owner._id]);
 
   useEffect(() => {
     getUserPosts();
@@ -278,7 +278,7 @@ const SmallCards = ({ data, getPosts }) => {
     return { __html: val };
   }
 
-  const handleDeleteBlog = useCallback(async () => {
+  const handleDeleteBlog = async () => {
     try {
       setLoading(true)
       const res = await api.delete(`/api/blog/post/${data._id}`);
@@ -288,9 +288,9 @@ const SmallCards = ({ data, getPosts }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [data._id, getPosts]);
+  };
 
-  const handleLike = useCallback(async () => {
+  const handleLike = async () => {
     try {
       await api.get(`/api/blog/post/${data._id}`);
       // console.log(test);
@@ -298,11 +298,7 @@ const SmallCards = ({ data, getPosts }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [getPosts]);
-
-  useEffect(() => {
-    getPosts();
-  }, [getPosts]);
+  };
 
   var date = new Date(data?.createdAt);
   date = date.toDateString();
