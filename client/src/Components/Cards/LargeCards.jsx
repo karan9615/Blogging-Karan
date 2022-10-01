@@ -146,7 +146,7 @@ const LargeCards = () => {
       (val) => val._id === JSON.parse(localStorage.getItem("userId"))
     );
     setLike(ress?.length === 1 ? true : false);
-  }, []);
+  }, [getThisPost,handleLike,handleDeleteBlog]);
 
   function createMarkup(val) {
     return { __html: val };

@@ -73,7 +73,7 @@ const Profile = () => {
   getUserProfile();
   setResponse(response)
   // console.log(response)
-  }, [])
+  }, [getUserProfile])
   
 
   return (

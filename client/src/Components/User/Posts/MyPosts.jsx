@@ -28,7 +28,7 @@ const MyPosts = () => {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [getPosts]);
 
   return (
     <div className="py-20">
