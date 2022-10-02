@@ -20,7 +20,7 @@ const {isAuthenticated} = require("../middlewares/auth")
 const router = express.Router(); 
 
 
-router.route("/auth/google").post(googleAuth)
+router.route("/authgoogle").post(googleAuth)
 
 
 router.route("/register").post(register); //done
