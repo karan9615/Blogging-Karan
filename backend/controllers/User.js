@@ -3,6 +3,9 @@ const Blog = require("../models/Blog");
 const { sendEmail } = require("../middlewares/sendEmail");
 const crypto = require("crypto");
 
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.CLIENT_ID);
+
 exports.googleAuth = async (req, res) => {
   try {
     const { token } = req.body;
