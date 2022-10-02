@@ -64,7 +64,7 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     //   }
     // })
     try{
-    const res = await api.post('api/user/auth/google',JSON.stringify({token: googleData.tokenId}))
+    const res = await api.post('/api/user/auth/google',JSON.stringify({token: googleData.tokenId}))
     console.log(res)
     localStorage.setItem("userToken", JSON.stringify(res.token));
     localStorage.setItem("userId", JSON.stringify(res.user._id));
@@ -195,7 +195,7 @@ const SignInPhase = ({ handleLoginState }) => {
     //   }
     // })
     try{
-    const res = await api.post('api/user/auth/google',JSON.stringify({token: googleData.tokenId}))
+    const res = await api.post('/api/user/auth/google',JSON.stringify({token: googleData.tokenId}))
     console.log(res)
     localStorage.setItem("userToken", JSON.stringify(res.token));
     localStorage.setItem("userId", JSON.stringify(res.user._id));
