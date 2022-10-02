@@ -53,7 +53,7 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
   };
 
   
-  const responseGoogle = async googleData => {
+  // const responseGoogle = async googleData => {
     // const res = await fetch("/auth/google", {
     //     method: "POST",
     //     body: JSON.stringify({
@@ -63,7 +63,7 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     //     "Content-Type": "application/json"
     //   }
     // })
-    console.log(googleData)
+    // console.log(googleData)
     // try{
     // const res = await api.post('/api/user/authgoogle',JSON.stringify({token: googleData.tokenId}))
     // console.log(res)
@@ -74,7 +74,7 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     //   console.log(error)
     // }
     // store returned user somehow
-  }
+  // }
 
 
   const inputStyle =
@@ -132,14 +132,14 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
         <span className="text-white">Signup With Google</span>{" "}
         <GoogleCircleFilled className="text-3xl text-white" />
       </a>
-
+{/* 
       <GoogleLogin
         clientId="976666646942-a0sbfuafr7d1cpbgbs9m34ge0lev31nm.apps.googleusercontent.com"
         buttonText="Login"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         cookiePolicy={"single_host_origin"}
-      />
+      /> */}
 
       <div className="my-5">
         Already have an account?{" "}
@@ -183,29 +183,6 @@ const SignInPhase = ({ handleLoginState }) => {
     // closeModal();
     // navigate('/')
   };
-
-    
-  const responseGoogle = async googleData => {
-    // const res = await fetch("/auth/google", {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //     token: googleData.tokenId
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // })
-    // try{
-    // const res = await api.post('/api/user/authgoogle',JSON.stringify({token: googleData.tokenId}))
-    // console.log(res)
-    // localStorage.setItem("userToken", JSON.stringify(res.token));
-    // localStorage.setItem("userId", JSON.stringify(res.user._id));
-    // }
-    // catch(error){
-    //   console.log(error)
-    // }
-    // store returned user somehow
-  }
 
 
   const handleForgotPassword = async () => {
@@ -264,14 +241,14 @@ const SignInPhase = ({ handleLoginState }) => {
         <span className="text-white">Signin With Google</span>{" "}
         <GoogleCircleFilled className="text-3xl text-white" />
       </div>
-      
+{/*       
       <GoogleLogin
         clientId="976666646942-a0sbfuafr7d1cpbgbs9m34ge0lev31nm.apps.googleusercontent.com"
         buttonText="Login"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         cookiePolicy={"single_host_origin"}
-      />
+      /> */}
       <div className="my-5">
         Don't have an account?{" "}
         <button
