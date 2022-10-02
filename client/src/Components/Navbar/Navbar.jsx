@@ -64,15 +64,15 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     //   }
     // })
     console.log(googleData)
-    try{
-    const res = await api.post('/api/user/authgoogle',JSON.stringify({token: googleData.tokenId}))
-    console.log(res)
-    localStorage.setItem("userToken", JSON.stringify(res.token));
-    localStorage.setItem("userId", JSON.stringify(res.user._id));
-    }
-    catch(error){
-      console.log(error)
-    }
+    // try{
+    // const res = await api.post('/api/user/authgoogle',JSON.stringify({token: googleData.tokenId}))
+    // console.log(res)
+    // localStorage.setItem("userToken", JSON.stringify(res.token));
+    // localStorage.setItem("userId", JSON.stringify(res.user._id));
+    // }
+    // catch(error){
+    //   console.log(error)
+    // }
     // store returned user somehow
   }
 
@@ -195,15 +195,15 @@ const SignInPhase = ({ handleLoginState }) => {
     //     "Content-Type": "application/json"
     //   }
     // })
-    try{
-    const res = await api.post('/api/user/authgoogle',JSON.stringify({token: googleData.tokenId}))
-    console.log(res)
-    localStorage.setItem("userToken", JSON.stringify(res.token));
-    localStorage.setItem("userId", JSON.stringify(res.user._id));
-    }
-    catch(error){
-      console.log(error)
-    }
+    // try{
+    // const res = await api.post('/api/user/authgoogle',JSON.stringify({token: googleData.tokenId}))
+    // console.log(res)
+    // localStorage.setItem("userToken", JSON.stringify(res.token));
+    // localStorage.setItem("userId", JSON.stringify(res.user._id));
+    // }
+    // catch(error){
+    //   console.log(error)
+    // }
     // store returned user somehow
   }
 
