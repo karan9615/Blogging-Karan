@@ -63,6 +63,7 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     //     "Content-Type": "application/json"
     //   }
     // })
+    console.log(googleData)
     try{
     const res = await api.post('/api/user/authgoogle',JSON.stringify({token: googleData.tokenId}))
     console.log(res)
