@@ -3,8 +3,9 @@ const cors = require("cors"); //cross-origin helps to connect with front-end
 const cookieParser = require("cookie-parser")
 const path = require("path")
 const connectDB = require("./config/db"); //database connection configuration file
-const passport = require("passport")
-const cookieSession = require("cookie-session")
+// const passport = require("passport")
+// const cookieSession = require("cookie-session");
+// const passportSetup = require('./passport')
 
 const app = express(); //create a express app
 app.use(express.json({ limit: "50mb" }));
@@ -19,6 +20,13 @@ const blogRoutes = require("./routes/Blog")
 
 
 // app.use(cors({credentials: true,origin: "http://localhost:3000"}));
+// app.use(cookieSession({
+//   name: "session",
+//   keys: ["blogs"],
+//   maxAge: 24*60*60*100,
+// }))
+// app.use(passport.initialize());
+// app.use(passport.session());
 app.use(cors())
 
 connectDB(); //Database connection
