@@ -37,5 +37,5 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 app.listen(process.env.PORT || 8080, () =>
-  console.log("app is succesfully running")
+  console.log("app is succesfully running",process.env.PORT)
 ); //Server running on port 8080
