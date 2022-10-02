@@ -8,8 +8,10 @@ import {
   MenuFoldOutlined,
   InstagramFilled,
   LinkedinFilled,
-  LoadingOutlined
+  LoadingOutlined,
 } from "@ant-design/icons";
+
+import GoogleLogin from "react-google-login";
 
 import ChangePassword from "../User/ChangePassword/ChangePassword";
 
@@ -27,7 +29,7 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     password: "",
   });
 
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,11 +39,11 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
 
   const handleSignUp = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const { data } = await api.post("/api/user/register", formData);
       localStorage.setItem("userToken", JSON.stringify(data.token));
       localStorage.setItem("userId", JSON.stringify(data.user._id));
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -49,6 +51,30 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
     // closeModal();
     // navigate("/")
   };
+
+  
+  const responseGoogle = async googleData => {
+    // const res = await fetch("/auth/google", {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //     token: googleData.tokenId
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+    try{
+    const res = await api.post('api/user/auth/google',JSON.stringify({token: googleData.tokenId}))
+    console.log(res)
+    localStorage.setItem("userToken", JSON.stringify(res.token));
+    localStorage.setItem("userId", JSON.stringify(res.user._id));
+    }
+    catch(error){
+      console.log(error)
+    }
+    // store returned user somehow
+  }
+
 
   const inputStyle =
     "bg-[#edf6ff] px-2 py-2 my-1 rounded-xl outline-none border-none hover:outline hover:outline-2 hover:outline-[#52ab98] focus:outline focus:outline-2 focus:outline-[#52ab98]";
@@ -98,10 +124,22 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
       <div className="text-lg text-center mx-auto my-3 text-[#2b6777] font-semibold">
         OR
       </div>
-      <div className="mx-auto flex items-center justify-center space-x-2 px-2 py-1 bg-[#2b6777]  cursor-pointer">
+      <a
+        href
+        className="mx-auto flex items-center justify-center space-x-2 px-2 py-1 bg-[#2b6777]  cursor-pointer"
+      >
         <span className="text-white">Signup With Google</span>{" "}
         <GoogleCircleFilled className="text-3xl text-white" />
-      </div>
+      </a>
+
+      <GoogleLogin
+        clientId="976666646942-a0sbfuafr7d1cpbgbs9m34ge0lev31nm.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={"single_host_origin"}
+      />
+
       <div className="my-5">
         Already have an account?{" "}
         <button
@@ -116,13 +154,13 @@ const SignUpPhase = ({ closeModal, loginState, handleLoginState }) => {
   );
 };
 
-const SignInPhase = ({  handleLoginState }) => {
+const SignInPhase = ({ handleLoginState }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -130,13 +168,13 @@ const SignInPhase = ({  handleLoginState }) => {
 
   const handleSignin = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const { data } = await api.post("/api/user/login", formData);
       // console.log(data)
       // console.log(data.user);
       localStorage.setItem("userToken", JSON.stringify(data.token));
       localStorage.setItem("userId", JSON.stringify(data.user._id));
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -145,12 +183,36 @@ const SignInPhase = ({  handleLoginState }) => {
     // navigate('/')
   };
 
+    
+  const responseGoogle = async googleData => {
+    // const res = await fetch("/auth/google", {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //     token: googleData.tokenId
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // })
+    try{
+    const res = await api.post('api/user/auth/google',JSON.stringify({token: googleData.tokenId}))
+    console.log(res)
+    localStorage.setItem("userToken", JSON.stringify(res.token));
+    localStorage.setItem("userId", JSON.stringify(res.user._id));
+    }
+    catch(error){
+      console.log(error)
+    }
+    // store returned user somehow
+  }
+
+
   const handleForgotPassword = async () => {
     try {
       if (formData.email) {
-        setLoading(true)
+        setLoading(true);
         await api.post("/api/user/forgot/password", { email: formData.email });
-        setLoading(false)
+        setLoading(false);
       } else {
         alert("Please type your email..");
       }
@@ -190,7 +252,7 @@ const SignInPhase = ({  handleLoginState }) => {
           onClick={handleSignin}
         >
           <div className="relative overflow-hidden hover:scale-125 transition-all duration-700">
-            {loading ? <LoadingOutlined />: "Login" }
+            {loading ? <LoadingOutlined /> : "Login"}
           </div>
         </div>
       </form>
@@ -201,6 +263,14 @@ const SignInPhase = ({  handleLoginState }) => {
         <span className="text-white">Signin With Google</span>{" "}
         <GoogleCircleFilled className="text-3xl text-white" />
       </div>
+      
+      <GoogleLogin
+        clientId="976666646942-a0sbfuafr7d1cpbgbs9m34ge0lev31nm.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={"single_host_origin"}
+      />
       <div className="my-5">
         Don't have an account?{" "}
         <button
@@ -435,7 +505,7 @@ const Navbar = () => {
             >
               My Posts
             </li>
-            
+
             <li
               className="hover:text-white px-3 py-1  bg-[#d6e1e9] hover:bg-[#52ab98] transition-all duration-500 cursor-pointer"
               onClick={() => {
