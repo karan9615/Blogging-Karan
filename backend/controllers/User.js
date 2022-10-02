@@ -3,53 +3,53 @@ const Blog = require("../models/Blog");
 const { sendEmail } = require("../middlewares/sendEmail");
 const crypto = require("crypto");
 
-const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client(process.env.CLIENT_ID);
+// const { OAuth2Client } = require("google-auth-library");
+// const client = new OAuth2Client(process.env.CLIENT_ID);
 
-exports.googleAuth = async (req, res) => {
-  try {
-    const { token } = req.body;
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.CLIENT_ID,
-    });
-    const { name, email } = ticket.getPayload();
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists",
-      });
-    }
-    //   const user = await User.upsert({
-    //     where: { email: email },
-    //     update: { name },
-    //     create: { name, email },
-    //   });
-    user = await User.create({
-      name,
-      email,
-    });
+// exports.googleAuth = async (req, res) => {
+//   try {
+//     const { token } = req.body;
+//     const ticket = await client.verifyIdToken({
+//       idToken: token,
+//       audience: process.env.CLIENT_ID,
+//     });
+//     const { name, email } = ticket.getPayload();
+//     let user = await User.findOne({ email });
+//     if (user) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "User already exists",
+//       });
+//     }
+//     //   const user = await User.upsert({
+//     //     where: { email: email },
+//     //     update: { name },
+//     //     create: { name, email },
+//     //   });
+//     user = await User.create({
+//       name,
+//       email,
+//     });
 
-    const temp_token = await user.generateToken();
+//     const temp_token = await user.generateToken();
 
-    const options = {
-      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-      httpOnly: true,
-    };
+//     const options = {
+//       expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+//       httpOnly: true,
+//     };
 
-    res.status(201).cookie("token",temp_token, options).json({
-      success: true,
-      user,
-      temp_token,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+//     res.status(201).cookie("token",temp_token, options).json({
+//       success: true,
+//       user,
+//       temp_token,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 exports.register = async (req, res) => {
   try {
